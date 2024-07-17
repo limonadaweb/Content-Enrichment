@@ -1,5 +1,7 @@
 from deep_translator import GoogleTranslator
 from deep_translator.exceptions import TranslationNotFound
+
+
 class Translator:
     def __init__(self, text, tgt_lang, src_lang):
         self.text = text
