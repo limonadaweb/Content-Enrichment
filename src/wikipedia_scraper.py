@@ -3,23 +3,20 @@ from bs4 import BeautifulSoup
 
 
 class Wikipedia_scraper:
-    def __init__(self, url, input):
+    def __init__(self, url):
         self.url = url
-        self.input = input
 
     def scraper(self):
         try:
-            response = requests.get(f"{self.url}{self.input}")
-            if response.status_code != 200:
+            response = requests.get(self.url)
+            if response.status_code != 200 and response.status_code != 404:
                 raise requests.HTTPError("Error en la llamada HTTP")
             soup = BeautifulSoup(response.text, 'html.parser')
             title = soup.find("h1").text
             mw_content = soup.find(id="mw-content-text")
             if mw_content.find(id="noarticletext"):
                 raise Exception("No se ha encontrado el árticulo seleccionado")
-
             elif mw_content.find("div", class_="mw-disambig-page"):
-
                 raise Exception("Se ha encontrado una página de desambiguación")
 
             else:
