@@ -19,4 +19,3 @@ class FileGenerator:
             except Exception as e:
                 print(f"Ocurrió un error al guardar el archivo: {e}")
                 break
-
