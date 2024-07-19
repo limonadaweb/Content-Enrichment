@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 
 
 class WikipediaScraper:
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, search_input):
+        self.url = f"https://es.wikipedia.org/wiki/{search_input}"
 
     def scrape(self):
         try:

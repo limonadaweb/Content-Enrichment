@@ -1,29 +1,50 @@
-from src.enrichment import TextCortexAI
+from src.text_enricher import TextEnricher
 from src.translator import Translator, TranslatorError
 from src.filegenerator import FileGenerator
 from src.wikipedia_scraper import WikipediaScraper
-from src.utils.text_utils import format_search_term, get_language_code
+from src.utils.text_utils import get_language_code
 from urllib.parse import quote
 
 
-def main():
-    api_key = "gAAAAABmmjTMSipJboqY_lJUV3qM6dJiW1QZEOKAb0dn67H42hy3Jt4j7MpprqRkj-QrKaxzqQ-GPU_Utsd60lEiT9dU7Zyg12E7m6P64uhLiSGuX_gD9Cj7QhBOdgCrpx7lnOWtMGxK"
+def get_serach_term():
     search_term = input("Ingrese el tema a buscar: ")
-    formatted_search_term = format_search_term(search_term)
-    encoded_term = quote(formatted_search_term)
+    return search_term
 
-    url = f"https://es.wikipedia.org/wiki/{encoded_term}"
 
-    wikipedia_scraper = WikipediaScraper(url)
-    scraped_data = wikipedia_scraper.scrape()
+def format_search_term(search_term):
+    search_term = search_term.strip()
+    search_term = search_term.replace(" ", "_")
+    search_term = search_term.title()
+    formatted_search_term = quote(search_term)
+    return formatted_search_term
+
+
+def get_wikipedia_data(search_input):
+    wikipedia_scraper = WikipediaScraper(search_input)
+    return wikipedia_scraper.scrape()
+
+
+def should_enrich_text():
+    answer = input("¿Te interesa enriquecer el texto? (si/no): ").lower().strip()
+    if answer == "si":
+        return True
+    else:
+        return False
+
+def main():
+    api_key = ("gAAAAABmmjTMSipJboqY_lJUV3qM6dJiW1QZEOKAb0dn67H42hy3Jt4j7MpprqRkj-QrKaxzqQ"
+               "-GPU_Utsd60lEiT9dU7Zyg12E7m6P64uhLiSGuX_gD9Cj7QhBOdgCrpx7lnOWtMGxK")
+    search_input = format_search_term(get_serach_term())
+
+    scraped_data = get_wikipedia_data(search_input)
 
     if scraped_data is not None:
         scraped_title, scraped_text = scraped_data
         text_to_translate = None
 
-        input_enrich = input("¿Te interesa enriquecer el texto?: ").lower()
+
         if input_enrich == "si":
-            text_enricher = TextCortexAI(api_key)
+            text_enricher = TextEnricher(api_key)
             text_to_translate = text_enricher.enrich_text(scraped_text)
         else:
             text_to_translate = scraped_text
