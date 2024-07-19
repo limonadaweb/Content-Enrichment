@@ -1,5 +1,10 @@
 from deep_translator import GoogleTranslator
 from deep_translator.exceptions import TranslationNotFound
+from deep_translator.exceptions import LanguageNotSupportedException
+
+
+class TranslatorError(Exception):
+    pass
 
 
 class Translator:
@@ -13,7 +18,8 @@ class Translator:
             translated_text = GoogleTranslator(source=self.src_lang, target=self.tgt_lang).translate(self.text)
             return translated_text
         except TranslationNotFound:
-            return "Traducción no disponible."
+            print("Traducción no disponible.")
+        except LanguageNotSupportedException:
+            print("Idioma no admitido.")
         except Exception as e:
-            return f"Sucedió un error inesperado: {e}"
-
+            print(f"Sucedió un error inesperado: {e}")
