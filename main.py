@@ -1,6 +1,6 @@
-from src.translator import Translator,TranslatorError
+from src.translator import Translator, TranslatorError
 from src.filegenerator import FileGenerator
-from src.wikipedia_scraper import Wikipedia_scraper
+from src.wikipedia_scraper import WikipediaScraper
 from src.utils.text_utils import format_search_term, get_language_code
 from urllib.parse import quote
 
@@ -12,8 +12,8 @@ def main():
 
     url = f"https://es.wikipedia.org/wiki/{encoded_term}"
 
-    wikipedia_scraper = Wikipedia_scraper(url)
-    scraped_data = wikipedia_scraper.scraper()
+    wikipedia_scraper = WikipediaScraper(url)
+    scraped_data = wikipedia_scraper.scrape()
 
     if scraped_data is not None:
         scraped_title, scraped_text = scraped_data

@@ -2,13 +2,14 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class Wikipedia_scraper:
-    def __init__(self, url):
-        self.url = url
+class WikipediaScraper:
+    def __init__(self, search_term):
+        self.search_term = search_term
 
-    def scraper(self):
+    def scrape(self):
         try:
-            response = requests.get(self.url)
+            url = f"https://es.wikipedia.org/wiki/{self.search_term}"
+            response = requests.get(url)
             if response.status_code != 200 and response.status_code != 404:
                 raise requests.HTTPError("Error en la llamada HTTP")
             soup = BeautifulSoup(response.text, 'html.parser')
