@@ -19,7 +19,9 @@ class Translator:
             return translated_text
         except TranslationNotFound:
             print("Traducción no disponible.")
+            return TranslationNotFound
         except LanguageNotSupportedException:
             print("Idioma no admitido.")
+            return LanguageNotSupportedException
         except Exception as e:
             print(f"Sucedió un error inesperado: {e}")
