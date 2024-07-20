@@ -15,6 +15,7 @@ def test_save_as_txt_creates_filename(tmpdir):
     with open(f"{filename}.txt", 'r', encoding='utf-8') as file:
         assert file.read().strip() == content.strip().lower()
 
+
 def test_save_as_txt_not_filename_provide(tmpdir):
     temp_file = tmpdir.join("")
     filename = temp_file.strpath
@@ -24,5 +25,3 @@ def test_save_as_txt_not_filename_provide(tmpdir):
     file_generator.save_as_txt()
 
     assert pytest.raises(ValueError)
-
-
