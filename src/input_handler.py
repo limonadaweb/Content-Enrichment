@@ -1,7 +1,11 @@
+from src.input_formatter import InputFormatter
+
+
 class InputHandler:
     @staticmethod
-    def get_serach_term():
+    def get_search_term():
         search_term = input("Ingrese el tema a buscar: ")
+        search_term = InputFormatter.format_search_term(search_term)
         return search_term
 
     @staticmethod
@@ -12,8 +16,8 @@ class InputHandler:
     @staticmethod
     def get_input_lang():
         input_lang = input("Ingrese el idioma para la traducción: ")
-        tgt_lang = get_language_code(input_lang)
-        return tgt_lang
+        input_lang = InputFormatter.get_language_code(input_lang)
+        return input_lang
 
     @staticmethod
     def should_enrich_text():
