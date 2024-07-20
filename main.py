@@ -1,75 +1,42 @@
-from src.text_enricher import TextEnricher
-from src.translator import Translator, TranslatorError
-from src.filegenerator import FileGenerator
+from src.input_formatter import InputFormatter
+from src.translator import TranslatorError
 from src.wikipedia_scraper import WikipediaScraper
-from src.utils.text_utils import get_language_code
-from urllib.parse import quote
+from src.input_handler import InputHandler
+from src.text_processor import TextProcessor
+from src.filegenerator_manager import FileGeneratorManager
 
-
-def get_serach_term():
-    search_term = input("Ingrese el tema a buscar: ")
-    return search_term
-
-
-def format_search_term(search_term):
-    search_term = search_term.strip()
-    search_term = search_term.replace(" ", "_")
-    search_term = search_term.title()
-    formatted_search_term = quote(search_term)
-    return formatted_search_term
-
-
-def get_wikipedia_data(search_input):
-    wikipedia_scraper = WikipediaScraper(search_input)
-    return wikipedia_scraper.scrape()
-
-
-def should_enrich_text():
-    answer = input("¿Te interesa enriquecer el texto? (si/no): ").lower().strip()
-    if answer == "si":
-        return True
-    else:
-        return False
 
 def main():
     api_key = ("gAAAAABmmjTMSipJboqY_lJUV3qM6dJiW1QZEOKAb0dn67H42hy3Jt4j7MpprqRkj-QrKaxzqQ"
                "-GPU_Utsd60lEiT9dU7Zyg12E7m6P64uhLiSGuX_gD9Cj7QhBOdgCrpx7lnOWtMGxK")
-    search_input = format_search_term(get_serach_term())
+    search_input = InputHandler.get_serach_term()
+    search_input = InputFormatter.format_search_term(search_input)
+    wikipedia_scraper = WikipediaScraper(search_input)
+    scraped_data = wikipedia_scraper.scrape()
 
-    scraped_data = get_wikipedia_data(search_input)
+    if scraped_data is None:
+        print("No se encontró información sobre el tema solicitado.")
+        return
 
-    if scraped_data is not None:
-        scraped_title, scraped_text = scraped_data
-        text_to_translate = None
-
-
-        if input_enrich == "si":
-            text_enricher = TextEnricher(api_key)
-            text_to_translate = text_enricher.enrich_text(scraped_text)
-        else:
-            text_to_translate = scraped_text
-
-        input_lang = input("Ingrese el idioma para la traducción: ")
-        trgt_lang = get_language_code(input_lang)
-
-        if trgt_lang is not None:
-            try:
-                translated_text = Translator(text_to_translate, trgt_lang, "es").translate()
-                translated_title = Translator(scraped_title, trgt_lang, "es").translate()
-
-                filename = input("Ingresa el nombre para el archivo que quieres generar (sin la extensión): ")
-                content = "\n".join([translated_title, translated_text])
-
-                file_generator = FileGenerator(filename, content)
-                file_generator.save_as_txt()
-
-                print(f"Archivo {filename}.txt generado con éxito.")
-            except TranslatorError as e:
-                print(f"Error en la traducción: {e}")
-        else:
-            print("Código de idioma no válido.")
+    scraped_title, scraped_text = scraped_data
+    if InputHandler.should_enrich_text():
+        text_to_translate = TextProcessor.process_text(scraped_text, api_key)
     else:
-        print("Error al obtener datos de Wikipedia.")
+        text_to_translate = scraped_text
+
+    tgt_lang = InputHandler.get_input_lang()
+    if tgt_lang is None:
+        print("Código de idioma no válido.")
+        return
+
+    try:
+        translated_text = TextProcessor.translate_text(text_to_translate, target_lang)
+        translated_title = TextProcessor.translate_text(scraped_title, target_lang)
+
+        filename = InputHandler.get_filename()
+        FileGeneratorManager.generate_file(filename, translated_title, translated_text)
+    except TranslatorError as e:
+        print(f"Error en la traducción: {e}")
 
 
 if __name__ == "__main__":
