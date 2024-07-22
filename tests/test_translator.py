@@ -46,3 +46,4 @@ def test_translate_error_src():
     result = my_translator.translate()
 
     assert pytest.raises(LanguageNotSupportedException)
+
