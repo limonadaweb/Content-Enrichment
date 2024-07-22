@@ -31,31 +31,34 @@
 
 ## Herramientas
 
-   Api Open AI
-   Api Deep Translate
-   Git
-   Python 3.12
-   Python Request
-   Jira
-   BeautifulSoap
-   PyTest
-   Canva
+   - Api TextCortex
+   - Api Deep Translate
+   - Git/Github
+   - Python 3.12
+   - Python Requests
+   - BeautifulSoap
+   - Pytest
 
 ## Instalación
 
-git clone del repositorio [https://github.com/limonadaweb/Content-Enrichment
-cd nombre de la carpeta
-pip install
+      git clone del repositorio [https://github.com/limonadaweb/Content-Enrichment
+
+      cd <nombre de la carpeta>
+
+      pip install -r requirements.txt
+
 Recuerda abrir tu entorno virtual antes de la instalación
 
 #  Colaboradores
 
-[https://github.com/ItalianCookieMonster]
+- Valentina: [https://github.com/ItalianCookieMonster]
 
-[https://github.com/laradrb]
+- Lara: [https://github.com/laradrb]
 
-[https://github.com/Erieltxu]
+- Leire: [https://github.com/Erieltxu]
 
-[https://github.com/noemipeteilh]
+- Noemi: [https://github.com/noemipeteilh]
 
-[https://github.com/pilimuino]
+- Pilar: [https://github.com/pilimuino]
+
+- Adriana: https://github.com/limonadaweb
