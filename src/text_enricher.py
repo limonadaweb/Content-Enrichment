@@ -1,7 +1,7 @@
 import requests
 
 
-class TextCortexAI:
+class TextEnricher:
     def __init__(self, api_key):
         self.api_key = api_key
         self.api_url = "https://api.textcortex.com/v1/texts/expansions"

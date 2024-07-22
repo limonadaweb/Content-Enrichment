@@ -1,4 +1,4 @@
-from src.enrichment import TextCortexAI
+from src.text_enricher import TextCortexAI
 from src.translator import Translator, TranslatorError
 from src.filegenerator import FileGenerator
 from src.wikipedia_scraper import WikipediaScraper
